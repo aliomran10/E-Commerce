@@ -1,0 +1,86 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+    <div class="container">
+        <!-- Brand Logo -->
+        <a class="navbar-brand font-weight-bold" href="#">
+            <i class="fas fa-store text-primary"></i> Online Shop
+        </a>
+
+        <!-- Mobile Toggle Button -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active text-primary font-weight-bold" routerLink="/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark font-weight-bold" routerLink="/products">Products</a>
+                </li>
+            </ul>
+
+            <!-- Search Bar -->
+            <!-- <form class="d-flex mx-4" role="search">
+                <input class="form-control me-2 rounded-pill border-primary" type="search"
+                    placeholder="Search for products..." aria-label="Search" style="width: 250px;">
+                <button class="btn btn-outline-primary rounded-pill" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form> -->
+
+            <!-- User Account & Cart/Wishlist Icons -->
+            <div>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <!-- If User Not Logged In -->
+                    @if(!isLogin) {
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" aria-current="page" routerLink="account">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" aria-current="page" routerLink="account/signup">Sign Up</a>
+                    </li>
+                    }
+
+                    <!-- If User Logged In -->
+                    @if(isLogin) {
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" routerLink="profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" routerLink="myOrders">My Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" routerLink="myReviews">My Reviews</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link text-primary" (click)="logout()">Logout</button>
+                    </li>
+
+                    <!-- Cart Icon -->
+                    <li class="nav-item">
+                        <a class="nav-link position-relative text-dark" routerLink="/cart">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                                {{productsLength}}
+                            </span>
+                        </a>
+                    </li>
+
+                    <!-- Wishlist Icon -->
+                    <li class="nav-item">
+                        <a class="nav-link position-relative text-dark" routerLink="/wishlist">
+                            <i class="far fa-heart"></i>
+                            <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                                {{wishlistLength}}
+                            </span>
+                        </a>
+                    </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

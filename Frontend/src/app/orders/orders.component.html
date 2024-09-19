@@ -1,0 +1,94 @@
+<div class="container py-5">
+    <!-- Page Title -->
+    <h2 class="text-center text-primary mb-5">My Orders</h2>
+    <hr class="my-4">
+
+    <!-- Orders Table -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-primary">
+                <tr class="text-center">
+                    <th>Products</th>
+                    <th>Delivered</th>
+                    <th>Paid</th>
+                    <th>Payment Method</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through Orders -->
+                @for(order of orders; track order._id){
+                <tr class="align-middle text-center">
+                    <td>
+                        <!-- Loop through cart items for each order -->
+                        <div class="d-flex flex-column align-items-start">
+                            @for(item of order.cartItems; track item._id){
+                            <div class="d-flex align-items-center mb-2">
+                                <img class="me-3 img-thumbnail" width="50px" [src]="productImage+item?.product?.cover"
+                                    [alt]="item?.product?.name">
+                                <span>{{item?.product?.name}} | <strong>Qty:</strong> {{item.quantity}}</span>
+                            </div>
+                            }
+                        </div>
+                    </td>
+                    <td>
+                        <!-- Check if the order is delivered -->
+                        <span class="badge bg-{{order.isDelivered ? 'success' : 'danger'}}">
+                            {{order.isDelivered ? 'Yes' : 'No'}}
+                        </span>
+                    </td>
+                    <td>
+                        <!-- Check if the order is paid -->
+                        <span class="badge bg-{{order.isPaid ? 'success' : 'danger'}}">
+                            {{order.isPaid ? 'Yes' : 'No'}}
+                        </span>
+                    </td>
+                    <td>{{order.paymentMethod}}</td>
+                    <td>
+                        <span class="fw-bold">{{order.totalPrice | currency}}</span>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination Section -->
+    <div class="d-flex justify-content-center mt-5">
+        <ul class="pagination">
+            <!-- Previous Button -->
+            @if(pagination.prev){
+            <li class="page-item">
+                <button (click)="changePage(pagination.prev)" class="page-link">Previous</button>
+            </li>
+            }
+
+            <!-- First Page Button -->
+            @if(pagination.currentPage !== 1){
+            <li class="page-item">
+                <button (click)="changePage(1)" class="page-link">1</button>
+            </li>
+            }
+
+            <!-- Current Page Button -->
+            <li class="page-item active">
+                <button class="page-link">{{pagination.currentPage}}</button>
+            </li>
+
+            <!-- Last Page Button -->
+            @if(pagination.currentPage !== pagination.totalPages){
+            <li class="page-item">
+                <button (click)="changePage(pagination.totalPages!)"
+                    class="page-link">{{pagination.totalPages}}</button>
+            </li>
+            }
+
+            <!-- Next Button -->
+            @if(pagination.next){
+            <li class="page-item">
+                <button (click)="changePage(pagination.next)" class="page-link">Next</button>
+            </li>
+            }
+        </ul>
+    </div>
+</div>

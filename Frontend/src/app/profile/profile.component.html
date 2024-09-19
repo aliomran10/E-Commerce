@@ -1,0 +1,87 @@
+<div class="container my-5">
+    <h1 class="text-center display-4 text-primary mb-5">Profile Information</h1>
+    <div class="card w-75 m-auto p-4 shadow-lg border-0">
+        <div class="d-flex justify-content-center align-items-center mb-4">
+            <div class="me-4">
+                <img class="img-thumbnail rounded-circle" [src]="userImage+user.image" alt="user.name"
+                    style="width: 150px; height: 150px;">
+            </div>
+            <div>
+                <h4 class="mb-3">Email: <span class="fw-light">{{user.email}}</span></h4>
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold" for="userName">Name</label>
+                    <input class="form-control border-primary" type="text" id="userName" placeholder="Enter your name"
+                        (change)="setName(userName.value)" #userName [value]="user.name">
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold" for="fileInput">Profile Picture</label>
+                    <input class="form-control border-primary" id="fileInput" (change)="getFile($event)" type="file"
+                        accept="image/*">
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold" for="address">Address</label>
+                    <input class="form-control border-primary" type="text" id="address" placeholder="Enter your address"
+                        (change)="setAddress(address.value)" #userName >
+                </div>
+                <button (click)="updateUser()" class="btn btn-primary mt-3">Update Profile</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-5">
+
+<div class="container my-5">
+    <h1 class="text-center display-4 text-primary mb-5">Change Password</h1>
+    <form [formGroup]="passwordForm" (ngSubmit)="changeUserPassword(passwordForm)"
+        class="card w-75 m-auto p-4 shadow-lg border-0">
+        <div class="form-group mb-4">
+            <label class="form-label fw-bold" for="currentPassword">Current Password</label>
+            <input formControlName="currentPassword" class="form-control border-primary" id="currentPassword"
+                type="password" placeholder="Enter your current password">
+            @if(passwordForm.get('currentPassword')?.errors && passwordForm.get('currentPassword')?.touched){
+            <div class="text-danger mt-2">
+                @if(passwordForm.get('currentPassword')?.errors?.['required']){<p>Current password is required</p>}
+                @if(passwordForm.get('currentPassword')?.errors?.['minlength'] ||
+                passwordForm.get('currentPassword')?.errors?.['maxlength']){
+                <p>Password must be 6-20 characters long</p>}
+            </div>
+            }
+            @if(currentPasswordError !== ''){
+            <div class="text-danger mt-2">{{currentPasswordError}}</div>
+            }
+        </div>
+
+        <div class="form-group mb-4">
+            <label class="form-label fw-bold" for="newPassword">New Password</label>
+            <input formControlName="password" class="form-control border-primary" id="newPassword" type="password"
+                placeholder="Enter your new password">
+            @if(passwordForm.get('password')?.errors && passwordForm.get('password')?.touched){
+            <div class="text-danger mt-2">
+                @if(passwordForm.get('password')?.errors?.['required']){<p>New password is required</p>}
+                @if(passwordForm.get('password')?.errors?.['minlength'] || passwordForm.get('password')?.errors?.['maxlength']){
+                <p>Password must be 6-20 characters long</p>}
+            </div>
+            }
+        </div>
+
+        <div class="form-group mb-4">
+            <label class="form-label fw-bold" for="confirmPassword">Confirm Password</label>
+            <input formControlName="confirmPassword" class="form-control border-primary" id="confirmPassword"
+                type="password" placeholder="Confirm your new password">
+            @if(passwordForm.get('confirmPassword')?.errors && passwordForm.get('confirmPassword')?.touched){
+            <div class="text-danger mt-2">
+                @if(passwordForm.get('confirmPassword')?.errors?.['required']){<p>Confirm password is required</p>}
+                @if(passwordForm.get('confirmPassword')?.errors?.['minlength'] ||
+                passwordForm.get('confirmPassword')?.errors?.['maxlength']){
+                <p>Confirm password must be 6-20 characters long</p>}
+            </div>
+            }
+            @if(passwordError !== ''){
+            <div class="text-danger mt-2">{{passwordError}}</div>
+            }
+        </div>
+
+        <button [disabled]="passwordForm.invalid" class="btn btn-primary w-100">Update Password</button>
+    </form>
+</div>

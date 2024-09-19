@@ -1,0 +1,12 @@
+.forgot-password-link {
+    // Remove default underline and set text color
+    text-decoration: none;
+    color: #0093c4;
+
+    // Set cursor to pointer on hover
+    &:hover {
+        cursor: pointer;
+        text-decoration: underline; // Optional: Add underline on hover
+        color: #007b99; // Optional: Change color on hover
+    }
+}

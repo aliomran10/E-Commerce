@@ -1,0 +1,76 @@
+<div class="wishlist-section container my-5">
+    <div class="row">
+        <div class="col-12">
+            <!-- Heading -->
+            <h2 class="main-heading text-center mb-4">My Wishlist</h2>
+
+            <!-- Wishlist Table -->
+            <div class="table-responsive wishlist-table">
+                <table class="table table-bordered text-center align-middle">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="text-left" width="45%">Product Name</th>
+                            <th width="15%">Subcategory</th>
+                            <th width="15%">Unit Price</th>
+                            <th width="15%"></th>
+                            <th width="10%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(product of wishlist; track product._id){
+                        <tr>
+                            <!-- Product Details -->
+                            <td class="text-left" width="45%">
+                                <div class="d-flex align-items-center">
+                                    <!-- Product Image -->
+                                    <div class="img-product mr-3">
+                                        <img [src]="productImage + product?.cover" [alt]="product?.name"
+                                            class="img-fluid rounded-lg" style="width: 80px;">
+                                    </div>
+                                    <!-- Product Name -->
+                                    <div class="name-product">
+                                        <h6 class="font-weight-bold">{{product?.name}}</h6>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Subcategory -->
+                            <td width="15%">
+                                <span class="text-muted">{{product?.subcategory?.name}}</span>
+                            </td>
+
+                            <!-- Price -->
+                            <td width="15%">
+                                <h6 class="font-weight-bold text-primary">{{product?.price | currency}}</h6>
+                            </td>
+
+                            <!-- Add to Cart Button -->
+                            <td width="15%">
+                                <button (click)="addToCart(product._id)" class="btn btn-success btn-sm btn-block">
+                                    <i class="fas fa-cart-plus"></i> Add to Cart
+                                </button>
+                            </td>
+
+                            <!-- Remove Button -->
+                            <td width="10%">
+                                <button (click)="removeFromWishlist(product._id)"
+                                    class="btn btn-danger btn-sm btn-block">
+                                    <i class="far fa-trash-alt"></i> Remove
+                                </button>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty Wishlist Message -->
+            <div *ngIf="wishlist.length === 0" class="text-center py-5">
+                <h5 class="text-muted">Your wishlist is currently empty</h5>
+                <a routerLink="/home" class="btn btn-outline-primary mt-3">
+                    Continue Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

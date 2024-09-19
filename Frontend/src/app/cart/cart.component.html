@@ -1,0 +1,138 @@
+<section class="h-100 bg-light">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12">
+                <div class="card shadow-lg" style="border-radius: 15px;">
+                    <div class="card-body p-0">
+                        <div class="row g-0">
+                            <!-- Cart Items Section -->
+                            <div class="col-lg-8">
+                                <div class="p-5">
+                                    <div class="d-flex justify-content-between align-items-center mb-5">
+                                        <h1 class="fw-bold mb-0">Shopping Cart</h1>
+                                        <h6 class="mb-0 text-muted">
+                                            <span class="badge bg-primary">{{ productsLength }} items</span>
+                                        </h6>
+                                    </div>
+                                    <hr class="my-4">
+
+                                    <!-- Loop through cart items -->
+                                    @for(item of cart?.cartItems; track item._id) {
+                                    <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                        <!-- Product Image -->
+                                        <div class="col-md-2">
+                                            <img [src]="productImage + item?.product?.cover"
+                                                class="img-fluid rounded-3 hover-shadow" [alt]="item?.product?.name"
+                                                style="transition: transform 0.3s ease-in-out; cursor: pointer;">
+                                        </div>
+                                        <!-- Product Details -->
+                                        <div class="col-md-4">
+                                            <h6 class="text-muted">{{ item?.product?.subcategory?.name }}</h6>
+                                            <h6 class="mb-0">{{ item?.product?.name }}</h6>
+                                        </div>
+                                        <!-- Quantity Control -->
+                                        <div class="col-md-4">
+                                            <form [formGroup]="quantityForm"
+                                                (ngSubmit)="updateQuantity(item._id, quantityForm)">
+                                                <div class="input-group">
+                                                    <input type="number" formControlName="quantity" min="1"
+                                                        class="form-control" [value]="item?.quantity">
+                                                    <button type="submit" class="btn btn-outline-primary">Update
+                                                        Quantity</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!-- Item Price (Price * Quantity) -->
+                                        <div class="col-md-2">
+                                            <h6 class="mb-0">{{ (item?.price * item?.quantity) | currency }}</h6>
+                                        </div>
+                                        <!-- Remove Item Button -->
+                                        <div class="col-md-2 text-end">
+                                            <button (click)="removeItem(item._id)" class="btn p-4">
+                                                <i class="fas fa-trash-alt text-danger"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <hr class="my-4">
+                                    }
+                                    <!-- Clear Cart Button -->
+                                    <div class="text-end">
+                                        <button (click)="clearCart()" class="btn btn-danger btn-lg mt-3 px-5">Clear
+                                            Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Order Summary Section -->
+                            <div class="col-lg-4 bg-light shadow-sm" style="border-radius: 15px;">
+                                <div class="p-5">
+                                    <h3 class="fw-bold mb-4">Order Summary</h3>
+                                    <hr class="my-4">
+
+                                    <!-- Total Items -->
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h5 class="fw-normal">Items ({{ productsLength }})</h5>
+                                        <h5>{{cart?.totalPrice|currency}}</h5>
+                                    </div>
+                                    <!-- Tax Price -->
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h5 class="fw-normal">Tax</h5>
+                                        <h5>{{ taxPrice | currency }}</h5>
+                                    </div>
+
+                                    <hr class="my-4">
+
+                                    <hr class="my-4">
+
+                                    <!-- Promo Code Section -->
+                                    <form [formGroup]="couponForm" (ngSubmit)="addCoupon(couponForm)">
+                                        <h5 class="mb-3">Promo Code</h5>
+                                        <div class="mb-3">
+                                            <input formControlName="code" type="text" class="form-control"
+                                                placeholder="Enter code">
+                                            @if(couponError !== '') {
+                                            <div class="text-danger mt-1">{{ couponError }}</div>
+                                            }
+                                        </div>
+                                        <button [disabled]="couponForm.invalid"
+                                            class="btn btn-outline-primary w-100">Apply
+                                            Code</button>
+                                    </form>
+
+                                    <hr class="my-4">
+
+                                    <!-- Total Price After Tax -->
+                                    <div class="d-flex justify-content-between mb-4">
+                                        <h5 class="fw-bold">Total</h5>
+                                        <h5 class="fw-bold">{{cart?.totalPrice+taxPrice|currency}}</h5>
+                                    </div>
+
+                                    <!-- Discounted Price (if applicable) -->
+                                    @if(cart?.totalPriceAfterDiscount) {
+                                    <div class="d-flex justify-content-between mb-4">
+                                        <h5 class="fw-bold">Discounted Total</h5>
+                                        <h5 class="fw-bold">{{ (cart?.totalPriceAfterDiscount + taxPrice) | currency }}
+                                        </h5>
+                                    </div>
+                                    }
+
+                                    <!-- Address Form -->
+                                    <h5 class="mb-3">Shipping Address</h5>
+                                    <form [formGroup]="addressForm" >
+                                        <div class="mb-3">
+                                            <input formControlName="country" type="text" class="form-control"
+                                                placeholder="Country">
+                                        </div>
+                                    </form>
+
+                                    <button (click)="createOrder(addressForm)" type="button"
+                                        class="btn btn-primary btn-lg w-100 mt-4">Checkout</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

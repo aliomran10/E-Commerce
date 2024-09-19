@@ -1,0 +1,115 @@
+<div class="container my-5">
+    <h2 class="text-center text-primary mb-5">My Reviews</h2>
+    <hr class="my-4">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-primary">
+                <tr class="text-center">
+                    <th scope="col">Product</th>
+                    <th scope="col">Review</th>
+                    <th scope="col">Rating</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(review of reviews; track review._id){
+                <tr class="align-middle text-center">
+                    <td class="d-flex align-items-center">
+                        <img class="me-3 img-thumbnail" width="50px" [src]="productImage+review?.product?.cover"
+                            [alt]="review?.product?.name">
+                        <span>{{review?.product?.name}}</span>
+                    </td>
+                    <td>
+                    <div>
+                        {{review?.comment}}
+                    </div>
+                       
+                    </td>
+                    <td>
+                        <span class="badge bg-warning text-dark fs-6">{{review?.rating}}/5</span>
+                    </td>
+                    <td>
+                        <button (click)="toggleEdit(review._id)" class="btn btn-sm btn-outline-primary me-2">
+                            Update
+                        </button>
+                        <button (click)="deleteReview(review._id)" class="btn btn-sm btn-outline-danger">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                @if(isEditingReview[review._id]){
+                <tr>
+                    <td colspan="4">
+                        <form [formGroup]="updateReviewForm" (ngSubmit)="updateReview(review._id, updateReviewForm)">
+                            <div class="mb-3">
+                                <label for="comment-{{review._id}}" class="form-label">Comment</label>
+                                <textarea id="comment-{{review._id}}" class="form-control" [(ngModel)]="review.comment"
+                                    name="comment" required></textarea>
+                            </div>
+                            <div class="rating d-flex justify-content-center align-items-center my-3">
+                                <input type="radio" formControlName="rating" id="star5-{{review._id}}" name="rating"
+                                    value="5" [checked]="review.rating === 5" />
+                                <label class="star" for="star5-{{review._id}}" title="Awesome"
+                                    aria-hidden="true">&#9733;</label>
+
+                                <input type="radio" formControlName="rating" id="star4-{{review._id}}" name="rating"
+                                    value="4" [checked]="review.rating === 4" />
+                                <label class="star" for="star4-{{review._id}}" title="Great"
+                                    aria-hidden="true">&#9733;</label>
+
+                                <input type="radio" formControlName="rating" id="star3-{{review._id}}" name="rating"
+                                    value="3" [checked]="review.rating === 3" />
+                                <label class="star" for="star3-{{review._id}}" title="Very good"
+                                    aria-hidden="true">&#9733;</label>
+
+                                <input type="radio" formControlName="rating" id="star2-{{review._id}}" name="rating"
+                                    value="2" [checked]="review.rating === 2" />
+                                <label class="star" for="star2-{{review._id}}" title="Good"
+                                    aria-hidden="true">&#9733;</label>
+
+                                <input type="radio" formControlName="rating" id="star1-{{review._id}}" name="rating"
+                                    value="1" [checked]="review.rating === 1" />
+                                <label class="star" for="star1-{{review._id}}" title="Bad"
+                                    aria-hidden="true">&#9733;</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary mx-2">Save</button>
+                            <button (click)="toggleEdit(review._id)" type="button"
+                                class="btn btn-secondary">Cancel</button>
+                        </form>
+                    </td>
+                </tr>
+                }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Pagination Section -->
+<div class="container d-flex justify-content-center mt-5">
+    <ul class="pagination">
+        @if(pagination.prev){
+        <li class="page-item">
+            <button (click)="changePage(pagination.prev)" class="page-link">Previous</button>
+        </li>
+        }
+        @if(pagination.currentPage !== 1){
+        <li class="page-item">
+            <button (click)="changePage(1)" class="page-link">1</button>
+        </li>
+        }
+        <li class="page-item active">
+            <button class="page-link">{{pagination.currentPage}}</button>
+        </li>
+        @if(pagination.currentPage !== pagination.totalPages){
+        <li class="page-item">
+            <button (click)="changePage(pagination.totalPages!)" class="page-link">{{pagination.totalPages}}</button>
+        </li>
+        }
+        @if(pagination.next){
+        <li class="page-item">
+            <button (click)="changePage(pagination.next)" class="page-link">Next</button>
+        </li>
+        }
+    </ul>
+</div>

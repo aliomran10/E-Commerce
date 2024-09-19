@@ -1,0 +1,83 @@
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>Sign Up</h3>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="signupForm" (ngSubmit)="signup(signupForm)">
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Name</label>
+                            <input formControlName="name" type="text" class="form-control" id="fullName" placeholder="Enter your full name">
+                            @if(signupForm.get('name')?.errors !== null && signupForm.get('name')?.touched){
+                                <div class="text-danger mt-2">
+                                    @if(signupForm.get('name')?.errors?.['required']){<p>Name is Required</p>}
+                                    @if(signupForm.get('name')?.errors?.['minlength'] || signupForm.get('name')?.errors?.['maxlength']){<p>Name Should be between 2 and 50 characters</p>}
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input formControlName="email" type="email" class="form-control" id="email" placeholder="Enter your email">
+                            @if(signupForm.get('email')?.errors !== null && signupForm.get('email')?.touched){
+                            <div class="text-danger mt-2">
+                                @if(signupForm.get('email')?.errors?.['required']){<p>Email is Required</p>}
+                                @if(signupForm.get('email')?.errors?.['email']){<p>Invalid Email</p>}
+                            </div>
+                            }
+                            @if(emailErrors !== ''){
+                            <div class="text-danger mt-2">
+                                <p>{{emailErrors}}</p>
+                            </div>
+                            }
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input formControlName="password" type="password" class="form-control" id="password" placeholder="Enter your password">
+                            @if(signupForm.get('password')?.errors !== null && signupForm.get('password')?.touched){
+                            <div class="text-danger mt-2">
+                                @if(signupForm.get('password')?.errors?.['required']){<p>Password is Required</p>}
+                                @if(signupForm.get('password')?.errors?.['minlength'] || signupForm.get('password')?.errors?.['maxlength']){<p>Password Should be between 5 and 20 characters</p>}
+                            </div>
+                            }
+                            @if(passwordErrors !== ''){
+                            <div class="text-danger mt-2">
+                                <p>{{passwordErrors}}</p>
+                            </div>
+                            }
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm Password</label>
+                            <input formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password">
+                            @if(signupForm.get('confirmPassword')?.errors !== null && signupForm.get('confirmPassword')?.touched){
+                            <div class="text-danger mt-2">
+                                @if(signupForm.get('confirmPassword')?.errors?.['required']){<p>Confirm Password is Required</p>}
+                                @if(signupForm.get('confirmPassword')?.errors?.['minlength'] || signupForm.get('confirmPassword')?.errors?.['maxlength']){<p>
+                                    Confirm Password Should be between 5 and 20 characters</p>}
+                            </div>
+                            }
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid gap-2">
+                            <button [disabled]="signupForm.invalid" type="submit" class="btn btn-primary btn-block">Sign Up</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    Already have an account? <a routerLink="/login" class="text-primary text-decoration-underline">Log in</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

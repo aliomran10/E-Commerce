@@ -1,0 +1,16 @@
+.rating input[type='radio'] {
+    display: none;
+}
+
+.rating label.star {
+    font-size: 2rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.rating label.star:hover,
+.rating label.star:hover~label.star,
+.rating input[type='radio']:checked~label.star {
+    color: #f1c40f;
+}

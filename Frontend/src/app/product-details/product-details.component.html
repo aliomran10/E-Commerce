@@ -1,0 +1,140 @@
+<div class="container product-details-section my-5">
+    <div class="row">
+        <!-- Left Column: Product Images -->
+        <div class="col-lg-5 col-md-6 mb-4">
+            <div class="main-image position-relative">
+                <img class="img-fluid rounded-lg shadow" [src]="imgDomain + product?.cover" [alt]="product.name">
+            </div>
+
+            <div class="row image-previews mt-3">
+                @for(image of product?.images; track image){
+                <div class="col-3 p-1">
+                    <img class="img-fluid rounded-lg shadow-sm" [src]="imgDomain + image" [alt]="product.name">
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- Right Column: Product Information -->
+        <div class="col-lg-7 col-md-6">
+            <div class="product-info p-4 border rounded-lg shadow-sm">
+                <!-- Category -->
+                <p class="text-uppercase text-muted font-weight-bold small mb-2">{{product?.subcategory?.name}}</p>
+
+                <!-- Product Title -->
+                <h2 class="product-title font-weight-bold">{{product?.name}}</h2>
+
+                <!-- Ratings -->
+                <div class="rating mb-3">
+                    <span class="badge badge-warning p-2">
+                        <i class="fa fa-star text-white"></i> {{product?.ratingAverage | number:'1.1-1'}}
+                    </span>
+                    <span class="text-muted small">({{product?.reviews.length}} reviews)</span>
+                </div>
+
+                <!-- Price Section -->
+                <div class="price mb-3">
+                    <h4 class="font-weight-bold text-primary">{{product?.price | currency}}</h4>
+                    <p class="text-muted small">(Taxes may apply)</p>
+                </div>
+
+                <!-- Add to Cart / Wishlist Buttons -->
+                <div class="d-flex mb-4">
+                    <button (click)="addToCart(product._id)" class="btn btn-success btn-lg shadow-sm mr-2">
+                        <i  class="fa fa-shopping-cart"></i> Add to Cart
+                    </button>
+                    <button (click)="addToWishlist(product._id)" class="btn btn-outline-primary btn-lg shadow-sm mx-3">
+                        <i class="fa fa-heart"></i> Add to Wishlist
+                    </button>
+                </div>
+
+                <!-- Product Details Section -->
+                <div class="product-description">
+                    <h5 class="font-weight-bold">Product Description</h5>
+                    <p class="text-muted">{{product?.description}}</p>
+                </div>
+
+                <!-- Delivery Info -->
+                <div class="delivery-info my-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fa fa-truck fa-2x text-primary"></i>
+                        <p class="mb-0 ml-3 font-weight-bold">
+                            Delivery in 3 days
+                        </p>
+                    </div>
+                    <p class="text-muted">Order now to receive the product within 3 business days.</p>
+                </div>
+
+                <!-- Customer Service Info -->
+                <div class="customer-service bg-light p-3 rounded-lg">
+                    <div class="d-flex align-items-center">
+                        <i class="fa fa-headset fa-2x text-info"></i>
+                        <p class="mb-0 ml-3">
+                            Need assistance? <strong>Chat with us</strong> or send an email.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Review Section -->
+    <div name="reviews" class="container my-5 p-4 shadow-sm rounded bg-light">
+        <h3 class="text-center mb-4">Add Your Review</h3>
+        <form [formGroup]="reviewForm" (ngSubmit)="addReview(product._id,reviewForm)">
+            <!-- Floating Textarea for Review -->
+            <div class="form-floating mb-3">
+                <textarea class="form-control border-2 rounded" formControlName="comment" placeholder="Leave a comment here"
+                    id="floatingTextarea" style="height: 150px;"></textarea>
+                <label for="floatingTextarea">Write your review</label>
+            </div>
+    
+            <!-- Error message -->
+            <div class="mt-3 text-danger text-center">
+                @if(reviewError!=='') { <label>{{reviewError}}</label> }
+            </div>
+    
+            <!-- Star Rating -->
+            <div class="rating d-flex justify-content-center align-items-center my-3">
+                <input type="radio" formControlName="rating" id="star5" name="rating" value="5" />
+                <label class="star" for="star5" title="Awesome" aria-hidden="true">&#9733;</label>
+    
+                <input type="radio" formControlName="rating" id="star4" name="rating" value="4" />
+                <label class="star" for="star4" title="Great" aria-hidden="true">&#9733;</label>
+    
+                <input type="radio" formControlName="rating" id="star3" name="rating" value="3" />
+                <label class="star" for="star3" title="Very good" aria-hidden="true">&#9733;</label>
+    
+                <input type="radio" formControlName="rating" id="star2" name="rating" value="2" />
+                <label class="star" for="star2" title="Good" aria-hidden="true">&#9733;</label>
+    
+                <input type="radio" formControlName="rating" id="star1" name="rating" value="1" />
+                <label class="star" for="star1" title="Bad" aria-hidden="true">&#9733;</label>
+            </div>
+    
+            <!-- Add Review Button -->
+            <div class="text-center">
+                <button class="btn btn-success shadow-sm px-4 py-2 mt-2">Submit Review</button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Customer Reviews Section -->
+    <div class="container mt-5">
+        <hr>
+        <h3 class="text-center mb-4">Customer Reviews</h3>
+        @for(review of product?.reviews; track review._id) {
+        <div class="review-item py-4 px-4 shadow-sm rounded mb-4 bg-white">
+            <h5 class="font-weight-bold">{{review?.user?.name}}</h5>
+            <!-- Star Rating -->
+            <div class="rating d-flex mb-2">
+                <span class="text-warning fs-4">
+                    &#9733; {{review?.rating}}
+                </span>
+                &star;
+            </div>
+            <p class="mb-1">{{review?.comment}}</p>
+            <small class="text-muted">{{review?.createdAt | date}}</small>
+        </div>
+        }
+    </div>
