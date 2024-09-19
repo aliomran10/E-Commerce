@@ -12,26 +12,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteSubCategory = exports.updateSubCategory = exports.getSubCategory = exports.getSubCategories = exports.createSubCategory = void 0;
+exports.resizeSubcategoryImage = exports.uploadSubcategoryImage = exports.deleteSubcategory = exports.updateSubcategory = exports.getSubcategory = exports.getSubcategories = exports.createSubcategory = exports.setCategoryId = exports.filterData = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
+const sharp_1 = __importDefault(require("sharp"));
 const subCategoryModel_1 = __importDefault(require("../models/subCategoryModel"));
-exports.createSubCategory = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const subCategory = yield subCategoryModel_1.default.create(req.body);
-    res.status(201).json({ data: subCategory });
-}));
-exports.getSubCategories = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const subCategories = yield subCategoryModel_1.default.find();
-    res.status(200).json({ data: subCategories });
-}));
-exports.getSubCategory = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const subCategory = yield subCategoryModel_1.default.findById(req.params.id);
-    res.status(200).json({ data: subCategory });
-}));
-exports.updateSubCategory = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const subCategory = yield subCategoryModel_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.status(200).json({ data: subCategory });
-}));
-exports.deleteSubCategory = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const subCategory = yield subCategoryModel_1.default.findByIdAndDelete(req.params.id);
-    res.status(204).json();
+const refactorHandler_1 = require("./refactorHandler");
+const uploadImages_1 = require("../middleware/uploadImages");
+const filterData = (req, res, next) => {
+    let filterData = {};
+    if (req.params.categoryId) {
+        filterData.category = req.params.categoryId;
+    }
+    ;
+    req.filterData = filterData;
+    next();
+};
+exports.filterData = filterData;
+const setCategoryId = (req, res, next) => {
+    if (!req.body.category) {
+        req.body.category = req.params.categoryId;
+    }
+    ;
+    next();
+};
+exports.setCategoryId = setCategoryId;
+exports.createSubcategory = (0, refactorHandler_1.createOne)(subCategoryModel_1.default);
+exports.getSubcategories = (0, refactorHandler_1.getAll)(subCategoryModel_1.default, 'subcategories');
+exports.getSubcategory = (0, refactorHandler_1.getOne)(subCategoryModel_1.default);
+exports.updateSubcategory = (0, refactorHandler_1.updateOne)(subCategoryModel_1.default);
+exports.deleteSubcategory = (0, refactorHandler_1.deleteOne)(subCategoryModel_1.default);
+exports.uploadSubcategoryImage = (0, uploadImages_1.uploadSingleImage)('image');
+exports.resizeSubcategoryImage = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.file) {
+        const imageName = `subcategory-${Date.now()}.jpeg`;
+        yield (0, sharp_1.default)(req.file.buffer)
+            .toFormat('jpeg')
+            .jpeg({ quality: 95 })
+            .toFile(`uploads/subcategories/${imageName}`);
+        req.body.image = imageName;
+    }
+    next();
 }));

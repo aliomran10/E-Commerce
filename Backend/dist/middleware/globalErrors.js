@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const globalErrors = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
-    err.status = err.status || "Error";
+    err.status = err.status || 'Error';
     if (process.env.NODE_ENV === 'development') {
         res.status(err.statusCode).json({
             error: err,
@@ -12,8 +12,8 @@ const globalErrors = (err, req, res, next) => {
     }
     else {
         res.status(err.statusCode).json({
-            message: err.message,
-            status: err.status
+            status: err.status,
+            message: err.message
         });
     }
 };

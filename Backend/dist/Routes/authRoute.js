@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const authorization_1 = require("../controllers/authorization");
+const authValidator_1 = require("../utils/validator/authValidator");
+const authRoute = (0, express_1.Router)();
+authRoute.route('/signup').post(authValidator_1.signupValidator, authorization_1.signup);
+authRoute.route('/login').post(authValidator_1.loginValidator, authorization_1.login);
+authRoute.route('/forgetPassword').post(authValidator_1.sendMailValidator, authorization_1.forgetPassword);
+authRoute.route('/verifyCode').post(authorization_1.verifyResetCode);
+authRoute.route('/resetCode').put(authValidator_1.resetCodeValidator, authorization_1.resetCode);
+exports.default = authRoute;
