@@ -4,7 +4,6 @@
   "description": "",
   "main": "app.ts",
   "scripts": {
-    "start": "node index.js",
     "start:dev": "nodemon app.ts",
     "start:prod": "NODE_ENV=product node ./dist/app.js",
     "build": "tsc"
